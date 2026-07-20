@@ -95,6 +95,14 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // The default 9,000+ word curriculum (src/data/defaultVocabulary.json)
+        // compiles into a single ~2.5 MB JS chunk. Workbox's default
+        // precache limit is 2 MiB, so without raising it here `vite build`
+        // throws ("Configure workbox.maximumFileSizeToCacheInBytes...") and
+        // the GitHub Actions build step fails outright — which is why no
+        // new deploy was ever reaching GitHub Pages. Raised to 5 MB to give
+        // headroom as the word list grows.
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         // CRITICAL: vite-plugin-pwa silently defaults navigateFallback to
         // 'index.html' unless told otherwise. That generates its own
         // NavigationRoute bound to the precached index.html, registered
